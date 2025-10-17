@@ -23,6 +23,7 @@ export default function Hero() {
             width={200}
             height={200}
             className="object-cover w-full h-full"
+            priority
           />
         </div>
 
@@ -30,7 +31,7 @@ export default function Hero() {
           className="mt-8 font-bold tracking-wide leading-snug text-center 
           text-3xl sm:text-5xl md:text-6xl max-w-[90%] sm:max-w-3xl lg:max-w-4xl"
         >
-          Crafting <span className="text-cyan-300">digital products</span>, brands, <br />
+          Crafting <span className="text-cyan-300">digital productss</span>, brands, <br />
           and experiences that <span className="text-cyan-300">inspire.</span>
         </h1>
 
