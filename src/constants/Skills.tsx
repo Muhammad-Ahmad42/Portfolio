@@ -3,7 +3,10 @@ import {
   SiTailwindcss,
   SiTypescript,
   SiReact,
+  SiJavascript,
+  SiFastapi,
   SiMongodb,
+  SiPostgresql,
 } from "react-icons/si";
 import { FaReact } from "react-icons/fa";
 
@@ -41,7 +44,22 @@ export const skills: Skill[] = [
   },
   {
     name: "JavaScript",
-    icon: <SiMongodb className="text-green-500 text-6xl" />,
+    icon: <SiJavascript className="text-yellow-400 text-6xl" />,
     percentage: 89,
+  },
+  {
+    name: "FastAPI",
+    icon: <SiFastapi className="text-emerald-400 text-6xl" />,
+    percentage: 82,
+  },
+  {
+    name: "MongoDB",
+    icon: <SiMongodb className="text-green-500 text-6xl" />,
+    percentage: 85,
+  },
+  {
+    name: "PostgreSQL",
+    icon: <SiPostgresql className="text-sky-400 text-6xl" />,
+    percentage: 80,
   },
 ];

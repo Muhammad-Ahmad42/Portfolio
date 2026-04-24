@@ -1,12 +1,242 @@
-/* globals.css */
-
 @import "tailwindcss";
 
-body {
-  @apply bg-[#0d0d1f] text-white antialiased;
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --bg-base:      #07101d;
+  --bg-surface:   #0f1627;
+  --bg-elevated:  #131f35;
+
+  --accent:       #22d3ee;
+  --accent-glow:  rgba(34, 211, 238, 0.2);
+  --accent-2:     #818cf8;
+
+  --text-1:       #f1f5f9;
+  --text-2:       #94a3b8;
+  --text-3:       #475569;
+
+  --border:       rgba(255, 255, 255, 0.07);
+  --border-hover: rgba(34, 211, 238, 0.30);
+
+  --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-std:     cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ============================================================
+   BASE
+   ============================================================ */
+body {
+  @apply antialiased;
+  background-color: var(--bg-base);
+  color: var(--text-1);
+}
+
 html {
   scroll-behavior: smooth;
 }
 
+/* ============================================================
+   DISPLAY FONT (Space Grotesk via CSS variable from Next.js)
+   ============================================================ */
+.display-font {
+  font-family: var(--font-display, system-ui), system-ui, sans-serif;
+}
 
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes orb-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.55; }
+  50%       { transform: scale(1.1); opacity: 0.80; }
+}
+
+@keyframes gradient-pan {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes ping-dot {
+  0%, 100% { transform: scale(1); opacity: 0.75; }
+  50%       { transform: scale(1.8); opacity: 0; }
+}
+
+/* ============================================================
+   ANIMATION UTILITIES
+   ============================================================ */
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s var(--ease-expo) both;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.6s var(--ease-expo) both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.65s var(--ease-expo) both;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.7s var(--ease-expo) both;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.7s var(--ease-expo) both;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+
+.animate-ping-dot {
+  animation: ping-dot 1.5s ease-out infinite;
+}
+
+.animate-gradient-pan {
+  background-size: 200% auto;
+  animation: gradient-pan 3.5s linear infinite;
+}
+
+/* ============================================================
+   GLASSMORPHISM
+   ============================================================ */
+.glass-effect {
+  background: rgba(15, 22, 39, 0.60);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+
+.glass-card {
+  background: linear-gradient(
+    135deg,
+    rgba(19, 31, 53, 0.75) 0%,
+    rgba(15, 22, 39, 0.90) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  transition:
+    border-color 0.35s var(--ease-std),
+    transform    0.35s var(--ease-std),
+    box-shadow   0.35s var(--ease-std);
+}
+
+.glass-card:hover {
+  border-color: var(--border-hover);
+  box-shadow:
+    0  8px 32px rgba(34, 211, 238, 0.07),
+    0  0   0   1px rgba(34, 211, 238, 0.04);
+}
+
+/* ============================================================
+   GRADIENT TEXT
+   ============================================================ */
+.gradient-text {
+  background: linear-gradient(135deg, #22d3ee 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-animated {
+  background: linear-gradient(90deg, #22d3ee, #818cf8, #22d3ee);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-pan 3.5s linear infinite;
+}
+
+/* ============================================================
+   SECTION EYEBROW LABEL
+   ============================================================ */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.section-eyebrow::before,
+.section-eyebrow::after {
+  content: '';
+  width: 2.25rem;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.4;
+}
+
+/* ============================================================
+   AMBIENT ORBS
+   ============================================================ */
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  animation: orb-breathe 7s ease-in-out infinite;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ============================================================
+   SELECTION & SCROLLBAR
+   ============================================================ */
+::selection {
+  background: rgba(34, 211, 238, 0.22);
+  color: #fff;
+}
+
+::-webkit-scrollbar        { width: 5px; }
+::-webkit-scrollbar-track  { background: var(--bg-base); }
+::-webkit-scrollbar-thumb  {
+  background: rgba(34, 211, 238, 0.28);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.55);
+}

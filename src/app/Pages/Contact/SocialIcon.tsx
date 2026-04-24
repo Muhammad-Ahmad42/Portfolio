@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-type SocialIconProps = {
+type Props = {
   link: string;
   icon: React.ReactNode;
   hoverColor?: string;
@@ -9,24 +9,23 @@ type SocialIconProps = {
   size?: string;
 };
 
-const SocialIcon: React.FC<SocialIconProps> = ({
+export default function SocialIcon({
   link,
   icon,
   hoverColor = "hover:bg-cyan-600",
-  bgColor = "bg-blue-950/60",
-  size = "w-14 h-14",
-}) => {
+  bgColor = "bg-white/[0.06]",
+  size = "w-11 h-11",
+}: Props) {
   return (
     <a
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${size} ${bgColor} rounded-full flex items-center justify-center 
-      cursor-pointer ${hoverColor} transition-all duration-300`}
+      className={`${size} ${bgColor} ${hoverColor} rounded-full flex items-center justify-center
+        border border-white/[0.06] hover:border-white/10
+        hover:scale-105 transition-all duration-200 cursor-pointer`}
     >
       {icon}
     </a>
   );
-};
-
-export default SocialIcon;
+}

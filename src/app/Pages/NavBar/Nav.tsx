@@ -5,66 +5,99 @@ import Link from "next/link";
 import { NavLinks } from "@/constants/constants";
 import { HiBars3BottomRight } from "react-icons/hi2";
 
-type Props = {
-  openNav: () => void;
-};
+type Props = { openNav: () => void };
 
-const Nav = ({ openNav }: Props) => {
-  const [navBg, setNavBg] = useState(false);
+export default function Nav({ openNav }: Props) {
+  const [scrolled, setScrolled] = useState(false);
+  const [activeId, setActiveId] = useState("home");
 
   useEffect(() => {
-    const handler = () => {
-      setNavBg(window.scrollY >= 80);
-    };
-    window.addEventListener("scroll", handler);
-    return () => window.removeEventListener("scroll", handler);
+    const onScroll = () => setScrolled(window.scrollY >= 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const ids = NavLinks.map((l) => l.url.slice(1));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveId(e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div
-      className={`transition-all duration-300 h-[8vh] z-[1000] fixed w-full 
-      ${navBg ? "bg-[#0f142ed9] shadow-lg backdrop-blur-md" : "bg-transparent"}`} >
+    <header
+      className={`fixed top-0 w-full z-[1000] transition-all duration-500 ${
+        scrolled
+          ? "bg-[rgba(7,16,29,0.88)] backdrop-blur-xl shadow-[0_1px_0_rgba(255,255,255,0.05)]"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="h-[70px] flex items-center justify-between w-[90%] md:w-[85%] mx-auto">
 
-      <div className="flex items-center h-full justify-between w-[90%] mx-auto text-white">
-        <Link href="#home" className="flex items-center space-x-3 group cursor-pointer">
-          <div className="w-10 h-10 bg-cyan-400 rounded-full flex items-center justify-center shadow-md 
-                            transition-all duration-300 group-hover:bg-cyan-300">
-            <FaCode className="w-5 h-5 text-[#0f1627]" />
+        {/* Logo */}
+        <Link href="#home" className="flex items-center gap-3 group">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/25 transition-transform duration-300 group-hover:scale-105">
+            <FaCode className="w-4 h-4 text-white" />
           </div>
-          <h1 className="text-xl md:text-2xl font-bold text-white tracking-wide group-hover:text-cyan-400 transition-all duration-300">
+          <span className="text-lg font-bold text-white tracking-tight group-hover:text-cyan-300 transition-colors duration-200">
             Ahmad
-          </h1>
+          </span>
         </Link>
 
-        <div className="hidden lg:flex items-center space-x-14">
-          {NavLinks.map((link) => (
-            <Link
-              key={link.id}
-              href={link.url}
-              className="group flex items-center space-x-3 text-base md:text-lg font-semibold text-gray-300 
-                        transition-all duration-300 hover:text-cyan-400"
-            >
-              <link.icon className="text-gray-300 group-hover:text-cyan-400 transition-all duration-300" />
-              <span className="relative">
+        {/* Desktop nav links */}
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary navigation">
+          {NavLinks.map((link) => {
+            const isActive = activeId === link.url.slice(1);
+            return (
+              <Link
+                key={link.id}
+                href={link.url}
+                className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                  ${isActive
+                    ? "text-white bg-white/5"
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
+              >
                 {link.label}
-                <span
-                  className="absolute left-0 -bottom-1 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full"
-                ></span>
-              </span>
-            </Link>
-          ))}
-        </div>
+                {isActive && (
+                  <span className="absolute inset-x-4 bottom-[5px] h-[2px] bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
 
-        <div className="flex items-center space-x-4">
-          <HiBars3BottomRight
+        {/* Right: CTA + hamburger */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="#contact"
+            className="hidden lg:block px-5 py-2 text-sm font-semibold rounded-full
+              bg-gradient-to-r from-cyan-500 to-blue-600 text-white
+              hover:shadow-lg hover:shadow-cyan-500/25 hover:scale-105
+              transition-all duration-300"
+          >
+            Hire Me
+          </Link>
+          <button
             onClick={openNav}
-            className="w-8 h-8 cursor-pointer text-gray-300 hover:text-cyan-400 lg:hidden transition-all duration-300"
-            aria-label="Menu"
-          />
+            aria-label="Open navigation menu"
+            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg
+              text-slate-300 hover:text-white hover:bg-white/5 transition-all duration-200"
+          >
+            <HiBars3BottomRight className="w-6 h-6" />
+          </button>
         </div>
       </div>
-    </div>
+    </header>
   );
-};
-
-export default Nav;
+}

@@ -1,54 +1,83 @@
+"use client";
 import { NavLinks } from "@/constants/constants";
 import Link from "next/link";
 import React from "react";
 import { CgClose } from "react-icons/cg";
+import { FaCode } from "react-icons/fa";
 import { IconType } from "react-icons";
 
-type NavLinkType = {
-  id: number;
-  label: string;
-  url: string;
-  icon: IconType;
-};
+type NavLinkType = { id: number; label: string; url: string; icon: IconType };
+type Props = { showNav: boolean; closeNav: () => void };
 
-type Props = {
-  showNav: boolean;
-  closeNav: () => void;
-};
-
-function MobileNav({ showNav, closeNav }: Props) {
-  const openNav = showNav ? "translate-x-0" : "translate-x-full";
-
+export default function MobileNav({ showNav, closeNav }: Props) {
   return (
-    <div
-      className={`fixed inset-0 ${openNav} bg-black/80 z-[100002] flex justify-end transition-all duration-100 ease-in-out`}
-    >
+    <>
+      {/* Backdrop */}
       <div
-        className={`text-cyan-300 ${openNav} flex flex-col justify-center h-full w-[80%] sm:w-[60%]
-       bg-gradient-to-b from-[#0f1627] to-[#07101d] space-y-8 px-8 py-10 shadow-2xl z-[100005] transition-transform duration-500`}
+        onClick={closeNav}
+        aria-hidden="true"
+        className={`fixed inset-0 z-[100001] bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+          showNav ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      />
+
+      {/* Slide-in panel */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
+        className={`fixed top-0 right-0 h-full w-[75%] max-w-xs z-[100002]
+          transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+          ${showNav ? "translate-x-0" : "translate-x-full"}
+          border-l border-white/[0.06]`}
+        style={{ background: "#0a1528" }}
       >
-        {NavLinks.map((link: NavLinkType) => {
-          return (
-            <Link key={link.id} href={link.url}>
-              <div className="flex items-center space-x-3 group">
-                <link.icon className="text-2xl text-cyan-300" />
-                <p
-                  className="text-cyan-300 text-xl sm:text-2xl md:text-3xl font-semibold 
-                  border-b border-cyan-300 w-fit pb-1 transition-all duration-200"
-                >
-                  {link.label}
-                </p>
-              </div>
+        {/* Panel header */}
+        <div className="flex items-center justify-between px-6 h-[70px] border-b border-white/[0.06]">
+          <Link href="#home" onClick={closeNav} className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+              <FaCode className="w-3.5 h-3.5 text-white" />
+            </div>
+            <span className="text-base font-bold text-white">Ahmad</span>
+          </Link>
+          <button
+            onClick={closeNav}
+            aria-label="Close navigation menu"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400
+              hover:text-white hover:bg-white/5 transition-all duration-200"
+          >
+            <CgClose className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Nav links */}
+        <nav className="flex flex-col px-4 py-6 gap-1" aria-label="Mobile navigation">
+          {NavLinks.map((link: NavLinkType) => (
+            <Link
+              key={link.id}
+              href={link.url}
+              onClick={closeNav}
+              className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-300
+                hover:text-white hover:bg-white/5 transition-all duration-200 group"
+            >
+              <link.icon className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span className="font-medium text-sm">{link.label}</span>
             </Link>
-          );
-        })}
-        <CgClose
-          onClick={closeNav}
-          className="absolute top-[0.7rem] right-[1.7rem] sm:w-8 sm:h-8 w-6 h-6 cursor-pointer text-cyan-300"
-        />
+          ))}
+        </nav>
+
+        {/* Bottom CTA */}
+        <div className="absolute bottom-10 left-0 right-0 px-6">
+          <Link
+            href="#contact"
+            onClick={closeNav}
+            className="block w-full py-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600
+              text-white text-sm font-semibold text-center shadow-lg shadow-cyan-500/20"
+          >
+            Hire Me
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
-
-export default MobileNav;

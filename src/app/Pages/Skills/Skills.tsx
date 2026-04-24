@@ -2,44 +2,68 @@
 import { skills } from "@/constants/Skills";
 import React from "react";
 import Tilt from "react-parallax-tilt";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 
 export default function Skills() {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
-    <section id="skills" className="py-20 bg-gradient-to-b from-[#0f1627] to-[#07101d]">
-      <h1 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-snug">
-        My <span className="text-cyan-400">Skills</span>
-      </h1>
+    <section id="skills" style={{ background: "var(--bg-base)" }} className="py-24">
+      <div
+        ref={ref}
+        className={`transition-all duration-700 ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
+      >
+        {/* Header */}
+        <div className="text-center mb-14">
+          <span className="section-eyebrow mb-5 block">My Expertise</span>
+          <h2 className="display-font text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+            My <span className="gradient-text">Skills</span>
+          </h2>
+        </div>
 
-      <div className="flex flex-wrap justify-center gap-10 mt-16 px-4">
-        {skills.map((skill) => (
-          <Tilt
-            key={skill.name}
-            tiltMaxAngleX={15}
-            tiltMaxAngleY={15}
-            scale={1.05}
-            transitionSpeed={800}
-            glareEnable={true}
-            glareColor="#00ffff"
-            glareMaxOpacity={0.3}
-            glarePosition="all"
-            className="rounded-3xl"
-          >
-            <div className="bg-[#101b2d] border border-cyan-500/10 hover:border-cyan-400/40
-                            w-40 h-48 sm:w-48 sm:h-56 rounded-3xl flex flex-col items-center justify-center
-                            shadow-lg shadow-cyan-500/20 hover:shadow-cyan-400/40
-                            transition-all duration-300 hover:scale-105 hover:bg-[#13203b]">
-              <div className="mb-3">{skill.icon}</div>
-
-              <p className="text-white text-2xl font-bold mb-1">
-                {skill.percentage}%
-              </p>
-
-              <p className="text-cyan-300 text-lg font-medium tracking-wide mt-1">
-                {skill.name}
-              </p>
-            </div>
-          </Tilt>
-        ))}
+        {/* Skill cards */}
+        <div className="flex flex-wrap justify-center gap-5 px-4 max-w-5xl mx-auto">
+          {skills.map((skill, index) => (
+            <Tilt
+              key={skill.name}
+              tiltMaxAngleX={12}
+              tiltMaxAngleY={12}
+              scale={1.04}
+              transitionSpeed={900}
+              glareEnable
+              glareColor="#22d3ee"
+              glareMaxOpacity={0.12}
+              glarePosition="all"
+              className="w-full sm:w-auto"
+            >
+              <div
+                style={{ transitionDelay: `${index * 80}ms` }}
+                className={`glass-card w-full sm:w-48 p-6 rounded-2xl flex flex-col items-center
+                  cursor-pointer group transition-all duration-500
+                  ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+              >
+                <div className="mb-4 group-hover:-translate-y-1.5 group-hover:scale-110 transition-transform duration-300">
+                  {skill.icon}
+                </div>
+                <p className="text-white text-2xl font-bold tracking-tight mb-0.5">
+                  {skill.percentage}%
+                </p>
+                <p className="text-cyan-300 text-sm font-semibold tracking-wide mb-5">
+                  {skill.name}
+                </p>
+                {/* Progress bar */}
+                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full transition-all duration-[1200ms] ease-out"
+                    style={{ width: isVisible ? `${skill.percentage}%` : "0%" }}
+                  />
+                </div>
+              </div>
+            </Tilt>
+          ))}
+        </div>
       </div>
     </section>
   );

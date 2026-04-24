@@ -7,27 +7,41 @@ type Props = {
   date?: string;
 };
 
-function WorksCards({ Icon, title, description, date }: Props) {
+export default function WorksCards({ Icon, title, description, date }: Props) {
   return (
-    <div className="mb-8">
-      <div className="flex items-start space-x-4 bg-gradient-to-r from-blue-950/40 to-cyan-900/20 transition-all duration-500
-       hover:from-blue-900/50 hover:to-cyan-800/30 hover:-translate-y-2 hover:shadow-2xl sm:p-6 p-6 rounded-2xl backdrop-blur-sm border
-        border-blue-900/40 ">
-      
-        <div className="sm:w-16 sm:h-16 w-12 h-12 bg-gradient-to-br from-cyan-500/30 to-blue-800/40 rounded-2xl flex items-center 
-        justify-center shadow-inner">
-          <div className="text-white sm:text-3xl text-2xl">{Icon}</div>
+    <div className="relative pl-6 sm:pl-8 group">
+      {/* Timeline vertical line */}
+      <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/40 via-cyan-500/15 to-transparent" />
+      {/* Timeline dot */}
+      <div
+        className="absolute left-[-5px] top-7 w-[10px] h-[10px] rounded-full
+          bg-[var(--bg-base)] border-2 border-cyan-500/50
+          group-hover:border-cyan-400 group-hover:shadow-[0_0_10px_rgba(34,211,238,0.5)]
+          transition-all duration-400"
+      />
+
+      <div className="glass-card rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start gap-4">
+        {/* Icon */}
+        <div
+          className="shrink-0 w-12 h-12 rounded-xl
+            bg-cyan-500/10 border border-cyan-500/15
+            flex items-center justify-center text-cyan-300 text-xl
+            group-hover:scale-105 transition-transform duration-300"
+        >
+          {Icon}
         </div>
-        <div className="flex-1">
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
           {date && (
-            <span className="inline-block mb-3 px-6 py-3 rounded-full bg-white text-blue-950 font-semibold text-xs sm:text-sm shadow-md">
+            <span className="inline-block mb-2.5 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-800/40 text-cyan-300 text-xs font-semibold tracking-wide">
               {date}
             </span>
           )}
-          <h3 className="text-white text-xl sm:text-2xl font-bold mb-2 tracking-wide">
+          <h3 className="text-white text-lg font-bold mb-1.5 group-hover:text-cyan-300 transition-colors duration-300 leading-snug">
             {title}
           </h3>
-          <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
+          <p className="text-slate-400 text-sm leading-relaxed">
             {description}
           </p>
         </div>
@@ -35,5 +49,3 @@ function WorksCards({ Icon, title, description, date }: Props) {
     </div>
   );
 }
-
-export default WorksCards;
